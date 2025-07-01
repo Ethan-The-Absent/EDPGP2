@@ -3,6 +3,7 @@ import './App.css'
 
 import Characters from './components/Characters'
 import Character from './components/Character';
+import Planet from './components/Planet';
 
 import {
   BrowserRouter as Router,
@@ -27,7 +28,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Characters/>}/>
             <Route path="/character/:id" element={<Character/>}/>
-            <Route path="/planet" element={<div>Planet</div>}/>
+            <Route path="/planet/:id" element={<Planet />}/>
             <Route path="/film" element={<div>Film</div>}/>
           </Routes>
         </main>
