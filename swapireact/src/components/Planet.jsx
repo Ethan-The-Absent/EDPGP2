@@ -11,62 +11,70 @@ const api = import.meta.env.VITE_API_URL
 
 
 const Planet = (props) => {
-    try {
-        const { id } = useParams();
+    const { id } = useParams();
+
+    const [data, setData] = useState([]);
+    const [characters, setCharacters] = useState([]);
+    const [films, setFilms] = useState([]);
+    const [loaded, setLoaded] = useState(true);
+    useEffect(() => {
+
         const idNumber = Number(id)
-        if (isNaN(idNumber) || idNumber > 100 || id < 1){
-            throw new Error('Invalid ID');
+
+        const fetchPlanet = async () => {
+            try {
+                const response = await fetch(`${api}planets/${idNumber}`) // to replace with env
+                if (!response.ok) {
+                    throw new Error('Data could not be fetched');
+                }
+                const json_response = await response.json();
+                setData(json_response);
+            } catch (error) {
+                setLoaded(false);
+                console.error('Error Fetching Data: ', error)
+            }
         }
-        const [data, setData] = useState([]);
-        const [characters, setCharacters] = useState([]);
-        const [films, setFilms] = useState([]);
-        useEffect(() => {
-            const fetchPlanet = async () => {
-                try {
-                    const response = await fetch(`${api}planets/${idNumber}`) // to replace with env
-                    if (!response.ok) {
-                        throw new Error('Data could not be fetched');
-                    }
-                    const json_response = await response.json();
-                    setData(json_response);
-                } catch (error) {
-                    console.error('Error Fetching Data: ', error)
-                }
-            }
 
-            const fetchCharacters = async () => {
-                try {
-                    const response = await fetch(`${api}planets/${idNumber}/characters`)
-                    if (!response.ok) {
-                        throw new Error('Data could not be fetched');
-                    }
-                    const json_response = await response.json();
-                    setCharacters(json_response);
-                } catch (error) {
-                    console.error('Error Fetching Data: ', error)
+        const fetchCharacters = async () => {
+            try {
+                const response = await fetch(`${api}planets/${idNumber}/characters`)
+                if (!response.ok) {
+                    throw new Error('Data could not be fetched');
                 }
+                const json_response = await response.json();
+                setCharacters(json_response);
+            } catch (error) {
+                setLoaded(false);
+                console.error('Error Fetching Data: ', error)
             }
+        }
 
-            const fetchFilms = async () => {
-                try {
-                    const response = await fetch(`${api}planets/${idNumber}/films`)
-                    if (!response.ok) {
-                        throw new Error('Data could not be fetched');
-                    }
-                    const json_response = await response.json();
-                    setFilms(json_response);
-                } catch (error) {
-                    console.error('Error Fetching Data: ', error)
+        const fetchFilms = async () => {
+            try {
+                const response = await fetch(`${api}planets/${idNumber}/films`)
+                if (!response.ok) {
+                    throw new Error('Data could not be fetched');
                 }
+                const json_response = await response.json();
+                setFilms(json_response);
+            } catch (error) {
+                setLoaded(false);
+                console.error('Error Fetching Data: ', error)
             }
+        }
 
+        if (isNaN(idNumber) || idNumber > 100 || id < 1) {
+            setLoaded(false);
+            console.error("Invalid ID");
+        } else {
             fetchPlanet();
             fetchCharacters();
             fetchFilms();
-        }, []
-        );
+        }
+    }, []
+    );
 
-
+    if (loaded) {
         return (
             <>
                 <main>
@@ -83,16 +91,16 @@ const Planet = (props) => {
                         <p>Orbital: <span id="orbital">{data.orbital_period}</span> days</p>
                     </section>
 
-                    <PlanetCharacterGroup planet={data} characters={characters}/>
+                    <PlanetCharacterGroup planet={data} characters={characters} />
                     <PlanetFilmGroup planet={data} films={films} />
                 </main>
             </>
         );
-    } catch {
-        return (
-            <ErrorLoading />
-        );
     }
+
+    return (
+        <ErrorLoading />
+    );
 };
 
 export default Planet;

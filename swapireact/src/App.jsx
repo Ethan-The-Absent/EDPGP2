@@ -5,6 +5,7 @@ import Characters from './components/Characters'
 import Character from './components/Character';
 import Planet from './components/Planet';
 import Film from './components/Film';
+import ErrorLoading from './components/ErrorLoading';
 
 import {
   BrowserRouter as Router,
@@ -31,6 +32,7 @@ function App() {
             <Route path="/character/:id" element={<Character/>}/>
             <Route path="/planet/:id" element={<Planet />}/>
             <Route path="/film/:id" element={<Film />}/>
+            <Route path="*" element={<ErrorLoading />} />
           </Routes>
         </main>
       </Router>

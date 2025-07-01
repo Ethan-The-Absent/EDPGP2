@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CharacterLink = (props) => {
     const link = `/character/${props.data.id}`
     return(
         <div className="card">
-            <a href={link}>{props.data.name}</a>
+            <Link to={link}>{props.data.name}</Link>
         </div>
     );
 };
