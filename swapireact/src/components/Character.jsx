@@ -10,15 +10,17 @@ const Character = () => {
     const [data, setData] = useState([]);
     const [loaded, setLoaded] = useState([]);
     const [planetData, setPlanetData] = useState([]);
+    const [filmData, setFilmData] = useState([]);
+
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
                 const idNumber = Number(id)
-                if (isNaN(idNumber) || idNumber > 100){
+                if (isNaN(idNumber) || idNumber > 100 || id < 1){
                     throw new Error('Invalid ID');
                 }
 
-                const response = await fetch(`${api}characters/${id}`) // to replace with env
+                const response = await fetch(`${api}characters/${id}`)
                 if (!response.ok) {
                   throw new Error('Data could not be fetched');
                 }
@@ -40,7 +42,7 @@ const Character = () => {
             fetchCharacter();
         }, []
     );
-    
+
     if (loaded) {
         const planet_link = `/planet/${planetData.id}`
         return (
