@@ -2,6 +2,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import PlanetCharacterGroup from "./PlanetCharacterGroup";
+import PlanetFilmGroup from "./PlanetFilmGroup";
+import ErrorLoading from "./ErrorLoading";
 
 
 const api = import.meta.env.VITE_API_URL
@@ -17,6 +19,7 @@ const Planet = (props) => {
         }
         const [data, setData] = useState([]);
         const [characters, setCharacters] = useState([]);
+        const [films, setFilms] = useState([]);
         useEffect(() => {
             const fetchPlanet = async () => {
                 try {
@@ -44,9 +47,22 @@ const Planet = (props) => {
                 }
             }
 
+            const fetchFilms = async () => {
+                try {
+                    const response = await fetch(`${api}planets/${idNumber}/films`)
+                    if (!response.ok) {
+                        throw new Error('Data could not be fetched');
+                    }
+                    const json_response = await response.json();
+                    setFilms(json_response);
+                } catch (error) {
+                    console.error('Error Fetching Data: ', error)
+                }
+            }
+
             fetchPlanet();
             fetchCharacters();
-            
+            fetchFilms();
         }, []
         );
 
@@ -68,12 +84,13 @@ const Planet = (props) => {
                     </section>
 
                     <PlanetCharacterGroup planet={data} characters={characters}/>
+                    <PlanetFilmGroup planet={data} films={films} />
                 </main>
             </>
         );
     } catch {
         return (
-            <div>There was a problem.</div>
+            <ErrorLoading />
         );
     }
 };
