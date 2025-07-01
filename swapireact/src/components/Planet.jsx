@@ -14,7 +14,7 @@ const Planet = (props) => {
     try {
         const { id } = useParams();
         const idNumber = Number(id)
-        if (isNaN(idNumber) || idNumber > 100) {
+        if (isNaN(idNumber) || idNumber > 100 || id < 1){
             throw new Error('Invalid ID');
         }
         const [data, setData] = useState([]);

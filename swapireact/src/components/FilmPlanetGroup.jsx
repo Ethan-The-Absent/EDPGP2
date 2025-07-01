@@ -5,11 +5,11 @@ const FilmPlanetGroup = (props) => {
     return (
         <section id="planets">
             <h2 id="seen-on">Planets</h2>
-            <span id="planet-list">{
+            <div className="card-container" id='planet-list' style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>{
                 props.planets.map((planet) => (
                     <PlanetLink key={planet.id} data={planet} />
                 ))
-            }</span>
+            }</div>
         </section>
     );
 };

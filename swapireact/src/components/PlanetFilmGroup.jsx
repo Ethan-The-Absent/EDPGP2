@@ -6,11 +6,11 @@ const PlanetFilmGroup = (props) => {
     return (
         <section id="characters">
             <h2 id="seen-on">Films appeared in</h2>
-            <span id="film-list">{
+            <div className="card-container" id='film-list' style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>{
                 props.films.map((film) => (
                     <FilmLink key={film.id} data={film} />
                 ))
-            }</span>
+            }</div>
         </section>
     );
 };
