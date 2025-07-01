@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ErrorLoading from "./ErrorLoading";
+import FilmLink from "./FilmLink";
 
 const api = import.meta.env.VITE_API_URL
 
@@ -26,6 +27,7 @@ const Character = () => {
                 }
                 const json_response = await response.json();
                 setData(json_response);
+
                 const p_response = await fetch(`${api}planets/${json_response.homeworld}`)
                 if (!response.ok) {
                     throw new Error('Planet data could not be fetched');
@@ -33,6 +35,13 @@ const Character = () => {
                 const p_json_response = await p_response.json();
                 setPlanetData(p_json_response)
                 
+                const f_response = await fetch(`${api}characters/${id}/films`)
+                if (!response.ok) {
+                    throw new Error('Film data could not be fetched');
+                }
+                const f_json_response = await f_response.json();
+                setFilmData(f_json_response);
+
                 setLoaded(true)
               } catch (error) {
                 setLoaded(false);
@@ -61,7 +70,16 @@ const Character = () => {
             <div className="card">Birth Year: {data.birth_year}</div>
             <div className="card">Height: {data.height}cm</div>
         </div>
+        <h3>Films Appeared In:</h3>
+        <div className="card-container" style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+                {
+                    filmData.map((film) => (
+                        <FilmLink id={film.id} data={film}/>
+                    ))
+                }
+            </div>
         </>
+        
     );}
 
     return(<ErrorLoading/>);
