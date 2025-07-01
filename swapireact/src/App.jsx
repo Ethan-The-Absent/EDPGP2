@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 import Characters from './components/Characters'
+import Character from './components/Character';
 
 import {
   BrowserRouter as Router,
@@ -11,25 +12,7 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [data, setData] = useState([]);
-  //const [page, setPage] = useState(1);
-  useEffect(() => {
-  const fetchCharacters = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/characters`) // to replace with env
-      if (!response.ok) {
-        throw new Error('Data could not be fetched');
-      }
-      const json_response = await response.json();
-      setData(json_response);
-    } catch (error) {
-      console.error('Error Fetching Data: ', error)
-      }
-    }
   
-    fetchCharacters();
-  }
-)
   return (
     <>
       <Router>
@@ -42,7 +25,8 @@ function App() {
         </nav>
         <main>
           <Routes>
-            <Route exact path="/" element={<Characters data={data}/>}/>
+            <Route exact path="/" element={<Characters/>}/>
+            <Route path="/character/:id" element={<Character/>}/>
             <Route path="/planet" element={<div>Planet</div>}/>
             <Route path="/film" element={<div>Film</div>}/>
           </Routes>
