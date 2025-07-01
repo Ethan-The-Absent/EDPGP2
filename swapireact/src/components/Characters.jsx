@@ -1,12 +1,15 @@
 import CharacterLink from "./CharacterLink"
 import { useState, useEffect } from 'react'
 
+
+const api = import.meta.env.VITE_API_URL
+
 const Characters = () =>{
     const [data, setData] = useState([]);
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/characters/`) // to replace with env
+                const response = await fetch(`${api}characters/`) // to replace with env
                 if (!response.ok) {
                   throw new Error('Data could not be fetched');
                 }
