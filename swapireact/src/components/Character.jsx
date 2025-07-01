@@ -9,6 +9,7 @@ const Character = () => {
     const { id } = useParams();
     const [data, setData] = useState([]);
     const [loaded, setLoaded] = useState([]);
+    const [planetData, setPlanetData] = useState([]);
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
@@ -23,6 +24,13 @@ const Character = () => {
                 }
                 const json_response = await response.json();
                 setData(json_response);
+                const p_response = await fetch(`${api}planets/${json_response.homeworld}`)
+                if (!response.ok) {
+                    throw new Error('Planet data could not be fetched');
+                }
+                const p_json_response = await p_response.json();
+                setPlanetData(p_json_response)
+                
                 setLoaded(true)
               } catch (error) {
                 setLoaded(false);
@@ -32,11 +40,16 @@ const Character = () => {
             fetchCharacter();
         }, []
     );
-    if (loaded) { return (
+    
+    if (loaded) {
+        const planet_link = `/planet/${planetData.id}`
+        return (
         <>
         <h2>{data.name}</h2>
         <hr></hr>
-        <div className="card">Homeworld: {data.homeword}</div>
+        <a href={planet_link}>
+        <button className="card">Homeworld: {planetData.name}</button>
+        </a>
         <div className="card-container" style={{display: 'flex', flexWrap: 'wrap', gap: '2px'}}>
             <div className="card">Gender: {data.gender}</div>
             <div className="card">Skin: {data.skin_color}</div>
